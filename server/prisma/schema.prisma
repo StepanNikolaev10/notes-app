@@ -5,10 +5,61 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/prisma/generated"
+  output   = "../prisma/generated"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id String @id @default(uuid())
+
+  email          String  @unique
+  username       String  @unique
+  hashedPassword String? @map("hashed_password")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  notes     Note[]
+
+  @@map("users")
+}
+
+model Note {
+  id String @id @default(uuid())
+
+  title          String?
+  text           String?
+  colorKey       colorKey @map("color_key")
+  status         status   @default(DEFAULT)
+  positionNumber Int      @map("position_number")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  authorId String @map("author_id")
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("tasks")
+}
+
+enum colorKey {
+  FIRST
+  SECOND
+  THIRD
+  FOURTH
+  FIFTH
+  SIXTH
+  SEVENTH
+  EIGHTH
+  NINTH
+  TENTH
+  ELEVENTH
+  TWELVEFTH
+}
+
+enum status {
+  DEFAULT
+  ARCHIVED
+  TRASHED
+}
