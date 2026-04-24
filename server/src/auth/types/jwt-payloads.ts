@@ -1,10 +1,10 @@
 import type { User } from '../../../prisma/generated/client';
 
-export type TAccessToken = {
+export type TAccessTokenPayload = {
   userId: User['id'];
 };
 
-export type TRefreshToken = {
+export type TRefreshTokenPayload = {
   userId: User['id'];
   sessionId: string;
 };
