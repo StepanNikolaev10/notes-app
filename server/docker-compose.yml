@@ -11,22 +11,6 @@ services:
       - 5433:5432
     volumes:
       - postgres_data:/var/lib/postgresql
-    networks:
-      - backend
-  redis:
-    image: redis:5.0
-    restart: always
-    ports:
-      - 6379:6379
-    volumes:
-      - redis_data:/data
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-    networks:
-      - backend
 
 volumes:
   postgres_data:
-  redis_data:
-
-networks:
-  backend:

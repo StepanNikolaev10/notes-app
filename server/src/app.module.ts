@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { NotesModule } from './notes/notes.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RedisModule } from './redis/redis.module';
 import { PrismaModule } from './prisma/prisma.module';
 import Joi from 'joi';
 
@@ -36,7 +35,7 @@ import Joi from 'joi';
         type: 'postgres',
         port: configService.get<number>('POSTGRES_PORT'),
         host: configService.get<string>('POSTGRES_HOST'),
-        database: configService.get<string>('POSTGRES_DB_NAME'),
+        database: configService.get<string>('POSTGRES_DB'),
         username: configService.get<string>('POSTGRES_USER'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         autoLoadEntities: true, // автоматически собирает все сущности зареганые через forFeature
@@ -46,7 +45,6 @@ import Joi from 'joi';
     UsersModule,
     AuthModule,
     NotesModule,
-    RedisModule,
     PrismaModule
   ] 
 })

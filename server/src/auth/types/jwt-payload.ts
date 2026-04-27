@@ -1,7 +1,6 @@
+import { JwtPayload } from 'jsonwebtoken';
 import type { User } from '../../../prisma/generated/client';
 
-export type TSessionPayload = {
+export type TJwtPayload = JwtPayload & {
   userId: User['id'];
-  createdAt: number;
-  isUpdated: boolean;
 };

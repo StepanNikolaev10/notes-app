@@ -7,6 +7,6 @@ import { UserEntity } from './user.entity';
   providers: [UsersService],
   imports: [TypeOrmModule.forFeature([UserEntity])], // forFeature([Entity]) делает только одну вещь: он создает Repository для этой сущности ...
   // ... и делает его доступным для внедрения (Dependency Injection) в этом модуле.
-  exports: [UsersService]
+  exports: [UsersService],
 })
 export class UsersModule {}
