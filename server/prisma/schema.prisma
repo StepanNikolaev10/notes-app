@@ -30,7 +30,7 @@ model Note {
 
   title          String?
   text           String?
-  colorKey       colorKey @map("color_key")
+  colorKey       colorKey @default(FIRST) @map("color_key")
   status         status   @default(DEFAULT)
   positionNumber Int      @map("position_number")
 

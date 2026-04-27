@@ -316,7 +316,7 @@ export type NoteCreateInput = {
   id?: string
   title?: string | null
   text?: string | null
-  colorKey: $Enums.colorKey
+  colorKey?: $Enums.colorKey
   status?: $Enums.status
   positionNumber: number
   createdAt?: Date | string
@@ -328,7 +328,7 @@ export type NoteUncheckedCreateInput = {
   id?: string
   title?: string | null
   text?: string | null
-  colorKey: $Enums.colorKey
+  colorKey?: $Enums.colorKey
   status?: $Enums.status
   positionNumber: number
   createdAt?: Date | string
@@ -364,7 +364,7 @@ export type NoteCreateManyInput = {
   id?: string
   title?: string | null
   text?: string | null
-  colorKey: $Enums.colorKey
+  colorKey?: $Enums.colorKey
   status?: $Enums.status
   positionNumber: number
   createdAt?: Date | string
@@ -511,7 +511,7 @@ export type NoteCreateWithoutAuthorInput = {
   id?: string
   title?: string | null
   text?: string | null
-  colorKey: $Enums.colorKey
+  colorKey?: $Enums.colorKey
   status?: $Enums.status
   positionNumber: number
   createdAt?: Date | string
@@ -522,7 +522,7 @@ export type NoteUncheckedCreateWithoutAuthorInput = {
   id?: string
   title?: string | null
   text?: string | null
-  colorKey: $Enums.colorKey
+  colorKey?: $Enums.colorKey
   status?: $Enums.status
   positionNumber: number
   createdAt?: Date | string
@@ -574,7 +574,7 @@ export type NoteCreateManyAuthorInput = {
   id?: string
   title?: string | null
   text?: string | null
-  colorKey: $Enums.colorKey
+  colorKey?: $Enums.colorKey
   status?: $Enums.status
   positionNumber: number
   createdAt?: Date | string
