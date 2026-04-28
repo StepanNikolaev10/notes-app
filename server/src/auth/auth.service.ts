@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   async registration(dto: RegisterDto) {
-    const candidate = await this.usersService.getOne(dto.email);
+    const candidate = await this.usersService.getOneByEmail(dto.email);
     if (candidate) {
       throw new HttpException(
         'User with this email already exists',
@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   async refresh(refreshJwtPayload: TJwtPayload) {
-    const isUserExists = await this.usersService.getOne(
+    const isUserExists = await this.usersService.getOneById(
       refreshJwtPayload.userId,
     );
     if (!isUserExists) {
@@ -59,13 +59,14 @@ export class AuthService {
   }
 
   private async validateUser(dto: LoginDto) {
-    const user = await this.usersService.getOne(dto.email);
+    const user = await this.usersService.getOneByEmail(dto.email);
     if (!user) {
       throw new UnauthorizedException({
         message: 'User with this email is not exists',
       });
     }
-    const passwordEquals = await bcrypt.compare(dto.password, dto.password);
+    
+    const passwordEquals = await bcrypt.compare(dto.password, user.hashedPassword);
     if (!passwordEquals) {
       throw new UnauthorizedException({ message: 'Invalide password' });
     }

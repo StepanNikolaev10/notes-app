@@ -5,30 +5,41 @@ import { PrismaService } from '../prisma/prisma.service';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createOne(email: string, username: string, hashedPassword: string) {
-    const createdUser = await this.prismaService.user.create({
+  createOne(email: string, username: string, hashedPassword: string) {
+    if (!email || !username || !hashedPassword) {
+      throw new BadRequestException();
+    }
+    
+    return this.prismaService.user.create({
       data: {
         email,
         username,
         hashedPassword,
       },
     });
-
-    return createdUser;
   }
 
-  async getOne(id?: string, email?: string) {
-    if (!id && !email) {
+  getOneById(id?: string) {
+    if (!id) {
       throw new BadRequestException();
     }
 
-    const user = await this.prismaService.user.findFirst({
+    return this.prismaService.user.findFirst({
       where: {
         id,
+      },
+    });
+  }
+
+  getOneByEmail(email?: string) {
+    if (!email) {
+      throw new BadRequestException();
+    }
+
+    return this.prismaService.user.findFirst({
+      where: {
         email,
       },
     });
-
-    return user;
   }
 }
