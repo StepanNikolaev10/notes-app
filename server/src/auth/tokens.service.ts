@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TJwtPayload } from './types/jwt-payload';
-import { JwtPayload } from 'jsonwebtoken';
 
 @Injectable()
 export class TokensService {
@@ -14,12 +13,12 @@ export class TokensService {
   async generateJwts(payload: TJwtPayload) {
     const accessJwt = await this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('ACCESS_JWT_SECRET'),
-      expiresIn: this.configService.get<number>('ACCESS_JWT_EXPIRES_IN'),
+      expiresIn: this.configService.get<number>('ACCESS_JWT_EXPIRES'),
     });
 
     const refreshJwt = await this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('REFRESH_JWT_SECRET'),
-      expiresIn: this.configService.get<number>('REFRESH_JWT_EXPIRES_IN'),
+      expiresIn: this.configService.get<number>('REFRESH_JWT_EXPIRES'),
     });
 
     return { accessJwt, refreshJwt };
