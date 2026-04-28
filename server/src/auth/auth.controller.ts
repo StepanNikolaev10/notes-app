@@ -9,42 +9,32 @@ import { plainToInstance } from 'class-transformer';
 import { RegisterDto } from './dto/req/register.dto';
 import { LoginDto } from './dto/req/login.dto';
 import type { TJwtPayload } from './types/jwt-payload';
+import { TokensService } from './tokens.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly tokenService: TokensService,
     private readonly configService: ConfigService,
   ) {}
 
   @Post('/registration')
-  async registration(
+  async register(
     @Body() dto: RegisterDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<AuthResDto> {
-    const jwts = await this.authService.registration(dto);
-
-    res.cookie('refreshToken', jwts.refreshJwt, {
-      httpOnly: true,
-      maxAge: this.configService.get<number>('REFRESH_JWT_EXPIRES')! * 1000, // знак ! стоит потому что приложение не запустится без env, стоит Joi schema
-    });
-
-    return plainToInstance(AuthResDto, { accessToken: jwts.accessJwt });
+  ) {
+    const userData = await this.authService.register(dto);
+    return this.giveJwts({ userId: userData.id }, res);
   }
 
   @Post('/login')
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<AuthResDto> {
-    const jwts = await this.authService.login(dto);
-
-    res.cookie('refreshToken', jwts.refreshJwt, {
-      httpOnly: true,
-      maxAge: this.configService.get<number>('REFRESH_JWT_EXPIRES')! * 1000,
-    });
-
-    return plainToInstance(AuthResDto, { accessToken: jwts.accessJwt });
+  ) {
+    const userData = await this.authService.login(dto);
+    return this.giveJwts({ userId: userData.id }, res);
   }
 
   @Post('/refresh')
@@ -52,17 +42,20 @@ export class AuthController {
   async refresh(
     @GetRefreshTokenPayload() refreshJwtPayload: TJwtPayload,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<AuthResDto> {
-    const jwts = await this.authService.refresh(refreshJwtPayload);
+  ) {
+    const userData = await this.authService.refresh(refreshJwtPayload);
+    return this.giveJwts({ userId: userData.id }, res);
+  }
 
-    if (jwts.refreshJwt) {
-      res.cookie('refreshJwt', jwts.refreshJwt, {
-        httpOnly: true,
-        maxAge:
-          this.configService.get<number>('REFRESH_JWT_EXPIRES')! * 1000,
-      });
-    }
+  // Private methods
+  private async giveJwts(tokenPaylaod: TJwtPayload, res: Response) {
+    const jwts = await this.tokenService.generateJwts(tokenPaylaod);
 
-    return plainToInstance(AuthResDto, { accessToken: jwts.accessJwt });
+    res.cookie('refreshJwt', jwts.refreshJwt, {
+      httpOnly: true,
+      maxAge: this.configService.get<number>('REFRESH_JWT_EXPIRES')! * 1000,
+    });
+
+    return jwts.accessJwt;
   }
 }

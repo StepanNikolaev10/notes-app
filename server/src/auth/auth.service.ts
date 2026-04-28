@@ -14,12 +14,9 @@ import { TJwtPayload } from './types/jwt-payload';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly tokensService: TokensService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
-  async registration(dto: RegisterDto) {
+  async register(dto: RegisterDto) {
     const candidate = await this.usersService.getOneByEmail(dto.email);
     if (candidate) {
       throw new HttpException(
@@ -29,47 +26,37 @@ export class AuthService {
     }
 
     const hashPassword = await bcrypt.hash(dto.password, 5);
-    const user = await this.usersService.createOne(
-      dto.email,
-      dto.username,
-      hashPassword,
-    );
 
-    return this.tokensService.generateJwts({ userId: user.id });
+    return this.usersService.createOne(dto.email, dto.username, hashPassword);
   }
 
   async login(dto: LoginDto) {
-    const user = await this.validateUser(dto);
-    return this.tokensService.generateJwts({ userId: user.id });
-  }
-
-  async refresh(refreshJwtPayload: TJwtPayload) {
-    const isUserExists = await this.usersService.getOneById(
-      refreshJwtPayload.userId,
-    );
-    if (!isUserExists) {
-      throw new UnauthorizedException(
-        'This account no longer exists. Please log in with a different account.',
-      );
-    }
-
-    return await this.tokensService.generateJwts({
-      userId: refreshJwtPayload.userId,
-    });
-  }
-
-  private async validateUser(dto: LoginDto) {
     const user = await this.usersService.getOneByEmail(dto.email);
     if (!user) {
       throw new UnauthorizedException({
         message: 'User with this email is not exists',
       });
     }
-    
-    const passwordEquals = await bcrypt.compare(dto.password, user.hashedPassword);
+
+    const passwordEquals = await bcrypt.compare(
+      dto.password,
+      user.hashedPassword,
+    );
     if (!passwordEquals) {
       throw new UnauthorizedException({ message: 'Invalide password' });
     }
+
+    return user;
+  }
+
+  async refresh(refreshJwtPayload: TJwtPayload) {
+    const user = await this.usersService.getOneById(refreshJwtPayload.userId);
+    if (!user) {
+      throw new UnauthorizedException(
+        'This account no longer exists. Please log in with a different account.',
+      );
+    }
+
     return user;
   }
 }
