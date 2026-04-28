@@ -491,6 +491,10 @@ export type NoteUncheckedUpdateManyWithoutAuthorNestedInput = {
   deleteMany?: Prisma.NoteScalarWhereInput | Prisma.NoteScalarWhereInput[]
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type EnumcolorKeyFieldUpdateOperationsInput = {
   set?: $Enums.colorKey
 }
