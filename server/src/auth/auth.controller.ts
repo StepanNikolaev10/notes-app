@@ -50,7 +50,6 @@ export class AuthController {
     return this.giveJwts({ userId: userData.id }, res);
   }
 
-  // Private methods
   private async giveJwts(tokenPaylaod: TJwtPayload, res: Response) {
     const jwts = await this.tokenService.generateJwts(tokenPaylaod);
 
