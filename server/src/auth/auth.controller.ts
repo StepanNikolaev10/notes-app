@@ -4,8 +4,8 @@ import type { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guard';
 import { GetRefreshTokenPayload } from './decorators/get-rt-payload.decorator';
-import { RegisterDto } from './dtos/req/register.dto';
-import { LoginDto } from './dtos/req/login.dto';
+import { RegisterDto } from './dtos/register.dto';
+import { LoginDto } from './dtos/login.dto';
 import type { TJwtPayload } from './types/jwt-payload';
 import { TokensService } from './tokens.service';
 
