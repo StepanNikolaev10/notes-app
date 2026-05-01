@@ -41,7 +41,7 @@ model Note {
   authorId String @map("author_id")
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  @@map("tasks")
+  @@map("notes")
 }
 
 enum colorKey {
