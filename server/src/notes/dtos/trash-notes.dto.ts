@@ -14,6 +14,6 @@ export class TrashNotesDto {
   @IsString({ each: true })
   readonly noteIds: string[];
 
-  @IsIn([status.DEFAULT, status.ARCHIVED])
+  @IsIn([status.default, status.archived])
   readonly currentStatus: Exclude<status, 'TRASHED'>;
 }
