@@ -8,6 +8,7 @@ import { RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
 import type { TJwtPayload } from './types/jwt-payload';
 import { TokensService } from './tokens/tokens.service';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +18,7 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
+  @ApiOperation({ summary: 'Регистрация в системе' })
   @Post('/registration')
   async register(
     @Body() dto: RegisterDto,
@@ -26,6 +28,7 @@ export class AuthController {
     return this.giveJwts({ userId: userData.id }, res);
   }
 
+  @ApiOperation({ summary: 'Вход в систему' })
   @Post('/login')
   async login(
     @Body() dto: LoginDto,
@@ -35,11 +38,13 @@ export class AuthController {
     return this.giveJwts({ userId: userData.id }, res);
   }
 
+  @ApiOperation({ summary: 'Выход из системы' })
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.cookie('refreshJwt', '');
   }
 
+  @ApiOperation({ summary: 'Обновление токенов авторизации' })
   @Post('/refresh')
   @UseGuards(JwtRefreshAuthGuard)
   async refresh(

@@ -21,11 +21,14 @@ import { GetAccessTokenPayload } from '../auth/decorators/get-at-payload.decorat
 import type { TJwtPayload } from '../auth/types/jwt-payload';
 import { UpdateNotePositionDto } from './dtos/update-note-position.dto';
 import { GetNotesDto } from './dtos/get-notes.dto';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('notes')
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
+  @ApiOperation({ summary: 'Добавить заметку' })
   @Post('/add')
   @UseGuards(JwtAccessAuthGuard)
   addNote(
@@ -35,6 +38,7 @@ export class NotesController {
     return this.notesService.addNote(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Архивировать заметку' })
   @Post('/archive')
   @UseGuards(JwtAccessAuthGuard)
   archiveNotes(
@@ -44,6 +48,7 @@ export class NotesController {
     return this.notesService.archiveNotes(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Разрхивировать заметку' })
   @Post('/unarchive')
   @UseGuards(JwtAccessAuthGuard)
   unarchiveNotes(
@@ -53,6 +58,7 @@ export class NotesController {
     return this.notesService.unarchiveNotes(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Поместить заметку корзину' })
   @Post('/trash')
   @UseGuards(JwtAccessAuthGuard)
   trashNotes(
@@ -62,6 +68,7 @@ export class NotesController {
     return this.notesService.trashNotes(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Убрать заметку из корзины' })
   @Post('/restore-trashed')
   @UseGuards(JwtAccessAuthGuard)
   restoreTrashedNotes(
@@ -71,6 +78,7 @@ export class NotesController {
     return this.notesService.restoreTrashedNotes(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Удалить замтеку' })
   @Delete('/delete')
   @UseGuards(JwtAccessAuthGuard)
   deleteNotes(
@@ -80,6 +88,7 @@ export class NotesController {
     return this.notesService.deleteNotes(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Обновить цвет заметки' })
   @Post('/update-color')
   @UseGuards(JwtAccessAuthGuard)
   updateNotesColor(
@@ -89,6 +98,7 @@ export class NotesController {
     return this.notesService.updateNotesColor(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Обновить контент заметки (заголовок, текст)' })
   @Post('/update-content')
   @UseGuards(JwtAccessAuthGuard)
   updateNoteContent(
@@ -98,6 +108,7 @@ export class NotesController {
     return this.notesService.updateNoteContent(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Изменить позицию заметки' })
   @Post('/update-position')
   @UseGuards(JwtAccessAuthGuard)
   updateNotePosition(
@@ -107,6 +118,7 @@ export class NotesController {
     return this.notesService.updateNotePosition(dto, accessJwtPayload.userId);
   }
 
+  @ApiOperation({ summary: 'Получить заметки' })
   @Get('/')
   @UseGuards(JwtAccessAuthGuard)
   getNotes(
