@@ -21,7 +21,6 @@ async function bootstrap() {
     .setTitle('Notes app backend')
     .setDescription('Some description')
     .setVersion('1.0')
-    .addTag('notes')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
